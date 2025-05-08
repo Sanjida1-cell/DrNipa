@@ -79,7 +79,7 @@ func main() {
 
 	// Serve the main HTML page
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "static/index.html")
+		http.ServeFile(w, r, "Static/index.html")
 	})
 
 	// API routes for booking and getting appointments
