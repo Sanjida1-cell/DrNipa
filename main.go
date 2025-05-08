@@ -1,10 +1,10 @@
-// main.go (Go backend for appointment booking)
 package main
 
 import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 	"sync"
 )
 
@@ -67,14 +67,26 @@ func getAppointments(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	// Get the port from the environment variable (Render sets it)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" // Default port if not set
+	}
+
+	// Serve static files from the 'static' directory
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
+	// Serve the main HTML page
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "static/index.html")
 	})
+
+	// API routes for booking and getting appointments
 	http.HandleFunc("/book", bookAppointment)
 	http.HandleFunc("/appointments", getAppointments)
 
-	log.Println("Server running on http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	// Start the server on the dynamic port
+	log.Printf("Server running on http://0.0.0.0:%s\n", port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
