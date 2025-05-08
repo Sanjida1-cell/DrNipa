@@ -74,7 +74,7 @@ func main() {
 	}
 
 	// Serve static files from the 'static' directory
-	fs := http.FileServer(http.Dir("./static"))
+	fs := http.FileServer(http.Dir("./Static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	// Serve the main HTML page
